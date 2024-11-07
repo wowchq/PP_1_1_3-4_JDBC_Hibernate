@@ -23,7 +23,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 "age TINYINT)";
         try (Connection connection = Util.getConnection()) {
             Statement statement = connection.createStatement();
-            statement.execute(sql);
+            statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
