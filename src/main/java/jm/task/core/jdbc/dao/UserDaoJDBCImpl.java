@@ -6,12 +6,18 @@ import jm.task.core.jdbc.util.Util;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class UserDaoJDBCImpl implements UserDao {
     public UserDaoJDBCImpl() {
 
+    }
+
+    private static final Logger logger = Logger.getLogger(UserDaoJDBCImpl.class.getName());
+    static {
+        logger.setLevel(Level.ALL);
     }
 
     public void createUsersTable() {
@@ -22,7 +28,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 "lastName VARCHAR(50), " +
                 "age TINYINT)";
         try (Connection connection = Util.getConnection()) {
-            Statement statement = connection.createStatement();
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.execute(sql);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -33,7 +39,7 @@ public class UserDaoJDBCImpl implements UserDao {
 
         String sql = "DROP TABLE IF EXISTS users";
         try (Connection connection = Util.getConnection()) {
-            Statement statement = connection.createStatement();
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.execute(sql);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -70,7 +76,7 @@ public class UserDaoJDBCImpl implements UserDao {
         String sql = "SELECT * FROM users";
         List<User> users = new ArrayList<>();
         try (Connection connection = Util.getConnection()) {
-            Statement statement = connection.createStatement();
+            PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet resultSet = statement.executeQuery(sql);
             while (resultSet.next()) {
                 User user = new User();
@@ -89,7 +95,7 @@ public class UserDaoJDBCImpl implements UserDao {
     public void cleanUsersTable() {
         String sql = "DELETE FROM users";
         try (Connection connection = Util.getConnection()) {
-            Statement statement = connection.createStatement();
+            PreparedStatement statement = connection.prepareStatement(sql);
             statement.execute(sql);
         } catch (SQLException e) {
             e.printStackTrace();
